@@ -1,0 +1,89 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
+
+.hero-orbs {
+  background: #020617;
+  position: relative;
+  isolation: isolate;
+}
+
+/* orb 1 */
+.hero-orbs::before {
+  content: "";
+  position: absolute;
+  width: 420px;
+  height: 420px;
+  background: radial-gradient(circle, rgba(59,130,246,0.55), transparent 70%);
+  filter: blur(70px);
+  border-radius: 50%;
+  top: -120px;
+  left: -120px;
+  animation: floatOrb1 10s ease-in-out infinite alternate;
+  z-index: -1;
+}
+
+/* orb 2 */
+.hero-orbs::after {
+  content: "";
+  position: absolute;
+  width: 420px;
+  height: 420px;
+  background: radial-gradient(circle, rgba(168,85,247,0.55), transparent 70%);
+  filter: blur(70px);
+  border-radius: 50%;
+  bottom: -120px;
+  right: -120px;
+  animation: floatOrb2 12s ease-in-out infinite alternate;
+  z-index: -1;
+}
+
+/* animations */
+@keyframes floatOrb1 {
+  from { transform: translate(0, 0); }
+  to { transform: translate(80px, 60px); }
+}
+
+@keyframes floatOrb2 {
+  from { transform: translate(0, 0); }
+  to { transform: translate(-80px, -60px); }
+}
