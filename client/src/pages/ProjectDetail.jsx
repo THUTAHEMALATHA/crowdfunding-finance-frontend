@@ -9,6 +9,8 @@ const ProjectDetail = () => {
   const { user }=useAuth();
 
   const [project, setProject] = useState(null);
+  const isGoalReached =
+  project.amount_raised >= project.funding_goal;
   const [loading, setLoading] = useState(true);
   const [rewards, setRewards] = useState([]);
   const [comments, setComments] = useState([]);
@@ -136,12 +138,19 @@ const handleAddMilestone = async () => {
 const handleDonate = async () => {
   const user = JSON.parse(localStorage.getItem("user"));
 
+  // 🔒 login check
   if (!user) {
     return toast.error("Please login to donate");
   }
 
+  // 🔒 amount check
   if (!donationAmount) {
     return toast.error("Enter amount");
+  }
+
+  // 🔒 GOAL REACHED GUARD (frontend safety)
+  if (project?.amount_raised >= project?.funding_goal) {
+    return toast.error("Funding goal already reached");
   }
 
   try {
@@ -149,7 +158,7 @@ const handleDonate = async () => {
       method: "POST",
       body: JSON.stringify({
         project_id: id,
-        user_id: user.id,
+        user_id: user.id, // (backend ignore - OK)
         reward_id: null,
         amount: Number(donationAmount),
       }),
@@ -157,12 +166,21 @@ const handleDonate = async () => {
 
     toast.success("Donation successful");
     setDonationAmount("");
-    fetchProject();
+
+    // 🔄 refresh project data
+    await fetchProject();
   } catch (err) {
-    toast.error("Donation failed");
+    // ✅ backend message show అవుతుంది
+    const message =
+      err?.response?.data?.message ||
+      err?.message ||
+      "Donation failed";
+
+    toast.error(message);
   }
 };
 
+// 
   const handleShare = async () => {
     const url = window.location.href;
 
@@ -400,10 +418,10 @@ const handleDonate = async () => {
           
           {/* donate button */}
           <button
-            onClick={handleDonate}
-             className="w-full bg-blue-600 hover:bg-blue-700 transition rounded-xl py-3 font-semibold mb-3"
-           >
-            Donate Now
+            disabled={isGoalReached}
+             onClick={handleDonate}
+          >
+            {isGoalReached ? "Goal Reached" : "Donate Now"}
           </button>
           {!user && (
               <p className="text-xs text-gray-400 mt-1">
