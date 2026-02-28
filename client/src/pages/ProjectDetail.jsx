@@ -9,10 +9,7 @@ const ProjectDetail = () => {
   const { user }=useAuth();
 
   const [project, setProject] = useState(null);
-  const isGoalReached =
-  project &&
-  Number(project?.amount_raised) >=
-  Number( project.funding_goal);
+ 
   const [loading, setLoading] = useState(true);
   const [rewards, setRewards] = useState([]);
   const [comments, setComments] = useState([]);
@@ -213,6 +210,11 @@ const handleDonate = async () => {
       </div>
     );
   }
+
+ const isGoalReached =
+  project &&
+  Number(project?.amount_raised) >=
+  Number( project.funding_goal);
 
   const percent = Math.min(
   ((project?.amount_raised || 0) / project?.funding_goal) * 100,
