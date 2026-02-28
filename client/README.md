@@ -7,7 +7,7 @@ Users can create projects, donate securely, and track funding progress.
 
 ## 🌐 Live Demo
 
-🔗 Frontend Live:  
+🔗 Live:  
 https://crowdfunding-frontend-two.vercel.app/
 
 🔗 Backend API:  
@@ -103,13 +103,13 @@ npm run preview
 ## 📸 Screenshots
 
 ### 🏠 Home Page
-![Home](./screenshots/home.png)
+![Home](./src/screenshots/home.png)
 
 ### 🔐 Login Page
-![Login](./screenshots/login.png)
+![Login](./src/screenshots/login.png)
 
 ### 🚀 Create Project
-![Create](./screenshots/create-project.png)
+![Create](./src/screenshots/create-project.png)
 
 🚀 Deployment (Vercel)
 
