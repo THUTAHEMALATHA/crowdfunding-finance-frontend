@@ -10,7 +10,9 @@ const ProjectDetail = () => {
 
   const [project, setProject] = useState(null);
   const isGoalReached =
-  project.amount_raised >= project.funding_goal;
+  project &&
+  Number(project?.amount_raised) >=
+  Number( project.funding_goal);
   const [loading, setLoading] = useState(true);
   const [rewards, setRewards] = useState([]);
   const [comments, setComments] = useState([]);
@@ -213,7 +215,7 @@ const handleDonate = async () => {
   }
 
   const percent = Math.min(
-  ((project.amount_raised || 0) / project.funding_goal) * 100,
+  ((project?.amount_raised || 0) / project?.funding_goal) * 100,
   100
   );
 
@@ -393,11 +395,11 @@ const handleDonate = async () => {
         {/* RIGHT FUNDING CARD */}
         <div className="bg-[#111827] border border-gray-800 rounded-2xl p-6 h-fit sticky top-6">
           <div className="text-2xl font-bold mb-2">
-            ₹{project.amount_raised}
+            ₹{project?.amount_raised}
           </div>
 
           <div className="text-gray-400 mb-4">
-            raised of ₹{project.funding_goal}
+            raised of ₹{project?.funding_goal}
           </div>
 
           {/* progress */}
