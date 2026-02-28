@@ -422,16 +422,16 @@ const handleDonate = async () => {
           
           {/* donate button */}
           <button
+            onClick={handleDonate}
             disabled={isGoalReached}
-             onClick={handleDonate}
+              className={`w-full py-3 mt-2 rounded-lg font-semibold text-white transition
+              ${isGoalReached
+                          ? "bg-gray-500 opacity-50 cursor-not-allowed"
+                          : "bg-blue-600 hover:bg-blue-700"}
+              `}
           >
-            {isGoalReached ? "Goal Reached" : "Donate Now"}
+                   {isGoalReached ? "Goal Reached" : "Donate Now"}
           </button>
-          {!user && (
-              <p className="text-xs text-gray-400 mt-1">
-                 Login required to donate
-              </p>
-           )}
 
           {/* share */}
           <button
