@@ -1,115 +1,141 @@
-# 🚀 FundSpark — Frontend
+# 🚀 Crowdfunding Finance Platform (Frontend)
 
-Frontend for the FundSpark crowdfunding platform.  
-Built with React, Vite, and Tailwind CSS.
+A modern crowdfunding platform that connects project creators with backers.  
+Users can create projects, donate securely, and track funding progress.
 
 ---
 
-## 🧱 Tech Stack
+## 🌐 Live Demo
+
+🔗 Frontend Live:  
+https://crowdfunding-frontend-two.vercel.app/
+
+🔗 Backend API:  
+https://crowdfund-backend-3xdd.onrender.com
+
+🔗 Backend Repository:  
+https://github.com/THUTAHEMALATHA/backend-crowdfund
+
+---
+
+## 🧠 Tech Stack
+
+**Frontend**
 
 - React (Vite)
-- Tailwind CSS
 - React Router DOM
+- Tailwind CSS
+- Supabase JS
 - React Toastify
-- Supabase Auth
-- Fetch API
+
+**Deployment**
+
+- Vercel
 
 ---
 
 ## ✨ Features
 
-- User authentication (Supabase)
-- Discover projects
-- Search & filter projects by category
-- View project details
-- Donate to projects (protected)
-- Create project (protected)
-- Responsive navbar
-- Success stories section
+- 🔐 User Authentication (Supabase)
+- 🧭 Protected Routes
+- 📢 Create Project
+- 💰 Donate to Projects
+- 📱 Fully Responsive UI
+- ⚡ Fast Vite build
+- 🔔 Toast notifications
+- 🖼️ Project image support
 
 ---
 
-## 📂 Folder Structure
+## 📂 Project Structure
+
 client/
 ├── src/
+│ ├── assets/
 │ ├── components/
-│ ├── pages/
+│ │ ├── common/
+│ │ │ └── Navbar.jsx
 │ ├── context/
+│ │ └── AuthContext.jsx
 │ ├── lib/
-│ ├── layouts/
+│ │ ├── api.js
+│ │ └── supabaseClient.js
+│ ├── pages/
+│ │ ├── Home.jsx
+│ │ ├── Login.jsx
+│ │ ├── Signup.jsx
+│ │ ├── CreateProject.jsx
+│ │ └── ProjectDetail.jsx
 │ ├── App.jsx
 │ └── main.jsx
-└── README.md
 
 ---
 
 ## ⚙️ Environment Variables
 
-Create a `.env` file inside **client/**
+Create `.env` inside **client/**
 
-VITE_API_URL=http://localhost:5000
-VITE_SUPABASE_URL=your_supabase_url
-VITE_SUPABASE_ANON_KEY=your_anon_key
+```env
+VITE_SUPABASE_URL=your_url
+VITE_SUPABASE_ANON_KEY=your_key
+VITE_API_URL=your_backend_url
 
----
+🧪 Run Locally (VS Code)
 
-## 📦 Installation
+1️⃣ Install dependencies
 
-From client folder:
-
-```bash
+cd client
 npm install
 
-▶️ Run Development Server
+2️⃣ Start dev server
 
 npm run dev
 
-Runs on:
+App runs at:
 
 http://localhost:5173
-
-🔐 Authentication Flow
-
-1.User logs in via Supabase
-
-2.Access token stored in localStorage
-
-3.Token attached to API requests
-
-4.Protected actions:
-
--Create Project
-
--Donate
-
-🔌 API Communication
-
-All requests use:
-
-src/lib/api.js
-
-Authorization header format:
-
-Authorization: Bearer <token>
 
 🏗️ Build for Production
 
 npm run build
-
-Preview build:
-
 npm run preview
 
-🚀 Deployment
+## 📸 Screenshots
 
-Frontend recommended on:
+### 🏠 Home Page
+![Home](./screenshots/home.png)
+
+### 🔐 Login Page
+![Login](./screenshots/login.png)
+
+### 🚀 Create Project
+![Create](./screenshots/create-project.png)
+
+🚀 Deployment (Vercel)
+
+1.Push code to GitHub
+
+2.Import project in Vercel
+
+3.Add environment variables
+
+4.Deploy
+
+
+👤 Author
+
+T.Hemalatha
+
+-GitHub: your-profile
+
+-Project: CrowdfundingPlatform_Finance
+
+⭐ Acknowledgements
+
+-Supabase
+
+-React
 
 -Vercel
 
-Build settings:
-
--Framework: Vite
-
--Build command: npm run build
-
--Output directory: dist
+-Tailwind CSS
