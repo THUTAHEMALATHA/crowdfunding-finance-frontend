@@ -34,7 +34,8 @@ const Home = () => {
         .includes(searchTerm.toLowerCase());
 
       const matchesCategory =
-        category === "all" || p.category === category;
+        category === "all" || 
+        p.category?.toLowerCase() === category.toLowerCase();
 
       return matchesSearch && matchesCategory;
     })
