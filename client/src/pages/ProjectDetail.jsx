@@ -4,6 +4,8 @@ import { apiFetch } from "../lib/api";
 import { toast } from "react-toastify";
 import { useAuth } from "../context/AuthContext";
 
+import { loadStripe } from "@stripe/stripe-js";
+
 const ProjectDetail = () => {
   const { id } = useParams();
   const { user }=useAuth();
@@ -24,8 +26,9 @@ const ProjectDetail = () => {
 });
    const [milestoneTitle, setMilestoneTitle] = useState("");
 const [milestoneAmount, setMilestoneAmount] = useState("");
-
-
+const stripePromise = loadStripe(
+  import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY
+);
   useEffect(() => {
     fetchProject();
     fetchExtras();
@@ -137,45 +140,35 @@ const handleAddMilestone = async () => {
 const handleDonate = async () => {
   const user = JSON.parse(localStorage.getItem("user"));
 
-  // 🔒 login check
-  if (!user) {
-    return toast.error("Please login to donate");
-  }
+  if (!user) return toast.error("Please login to donate");
+  if (!donationAmount) return toast.error("Enter amount");
 
-  // 🔒 amount check
-  if (!donationAmount) {
-    return toast.error("Enter amount");
-  }
-
-  // 🔒 GOAL REACHED GUARD (frontend safety)
   if (project?.amount_raised >= project?.funding_goal) {
     return toast.error("Funding goal already reached");
   }
 
   try {
-    await apiFetch("/api/donations/create", {
+    // ✅ create payment intent from backend
+    const res = await apiFetch("/create-payment-intent", {
       method: "POST",
       body: JSON.stringify({
-        project_id: id,
-        user_id: user.id, // (backend ignore - OK)
-        reward_id: null,
-        amount: Number(donationAmount),
+        amount: Number(donationAmount) * 100,
+        projectId: id,
       }),
     });
 
-    toast.success("Donation successful");
-    setDonationAmount("");
+    const stripe = await stripePromise;
 
-    // 🔄 refresh project data
-    await fetchProject();
+    // ✅ redirect to Stripe checkout
+    const { error } = await stripe.redirectToCheckout({
+      sessionId: res.sessionId,
+    });
+
+    if (error) {
+      toast.error(error.message);
+    }
   } catch (err) {
-    // ✅ backend message show అవుతుంది
-    const message =
-      err?.response?.data?.message ||
-      err?.message ||
-      "Donation failed";
-
-    toast.error(message);
+    toast.error(err?.message || "Payment failed");
   }
 };
 
