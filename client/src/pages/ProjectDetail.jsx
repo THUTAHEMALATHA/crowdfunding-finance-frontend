@@ -148,30 +148,28 @@ const handleDonate = async () => {
   }
 
   try {
-    // ✅ create payment intent from backend
+    // ✅ load stripe
+    const stripe = await stripePromise;
+
+    // ✅ call backend stripe session
     const res = await apiFetch("/create-payment-intent", {
       method: "POST",
       body: JSON.stringify({
-        amount: Number(donationAmount) * 100,
+        amount: Number(donationAmount),
         projectId: id,
       }),
     });
 
-    const stripe = await stripePromise;
-
     // ✅ redirect to Stripe checkout
-    const { error } = await stripe.redirectToCheckout({
+    await stripe.redirectToCheckout({
       sessionId: res.sessionId,
     });
 
-    if (error) {
-      toast.error(error.message);
-    }
   } catch (err) {
-    toast.error(err?.message || "Payment failed");
+    console.error(err);
+    toast.error("Stripe session failed");
   }
 };
-
 // 
   const handleShare = async () => {
     const url = window.location.href;
