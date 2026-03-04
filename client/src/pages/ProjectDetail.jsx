@@ -163,17 +163,12 @@ const handleDonate = async () => {
         `${import.meta.env.VITE_API_URL}/api/donate`,
         {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-          body: JSON.stringify({
+          body: JSON stringify({
             project_id: id,
             reward_id: null,
             amount: donationAmount,
           }),
-        }
-      );
+        });
 
       const data = await donateRes.json();
 
