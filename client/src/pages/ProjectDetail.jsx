@@ -157,8 +157,15 @@ const handleDonate = async () => {
     description: "Project Donation",
     order_id: order.id,
 
-    handler: function () {
+    handler: function (response) {
       alert("Payment Successful");
+    },
+    prefill: {
+      name : "Test User",
+      email: "test@test.com",
+    },
+    theme:{
+      color: "#3399cc"
     }
   };
 
