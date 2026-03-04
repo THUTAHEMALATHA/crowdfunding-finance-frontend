@@ -160,17 +160,18 @@ const handleDonate = async () => {
     handler: async function (response) {
 
       const donateRes = await fetch(
-        `${import.meta.env.VITE_API_URL}/donation/create`,
+        `${import.meta.env.VITE_API_URL}/donate`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
           body: JSON.stringify({
             project_id: id,
-            amount: Number(donationAmount)
-          })
+            reward_id: null,
+            amount: donationAmount,
+          }),
         }
       );
 
@@ -185,7 +186,6 @@ const handleDonate = async () => {
 
       console.log(response);
     },
-
     prefill: {
       name: "Test User",
       email: "test@test.com"
@@ -195,7 +195,6 @@ const handleDonate = async () => {
       color: "#3399cc"
     }
   };
-
   const rzp = new window.Razorpay(options);
   rzp.open();
 };
