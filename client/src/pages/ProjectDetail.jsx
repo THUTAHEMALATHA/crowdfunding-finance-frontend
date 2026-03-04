@@ -157,7 +157,9 @@ const ProjectDetail = () => {
 
       handler: function (response) {
         alert("Payment Successful");
-        console.log(response);
+        console.log("payment Id:", response.razorpay_payment_id);
+        console.log("order Id:", response.razorpay_order_id);
+        console.log("Signature:", response.razorpay_signature);
       },
 
       prefill: {
