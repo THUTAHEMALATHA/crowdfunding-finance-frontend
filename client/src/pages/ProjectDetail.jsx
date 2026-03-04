@@ -4,7 +4,6 @@ import { apiFetch } from "../lib/api";
 import { toast } from "react-toastify";
 import { useAuth } from "../context/AuthContext";
 
-import { loadStripe } from "@stripe/stripe-js";
 
 const ProjectDetail = () => {
   const { id } = useParams();
@@ -26,9 +25,7 @@ const ProjectDetail = () => {
 });
    const [milestoneTitle, setMilestoneTitle] = useState("");
 const [milestoneAmount, setMilestoneAmount] = useState("");
-const stripePromise = loadStripe(
-  import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY
-);
+
   useEffect(() => {
     fetchProject();
     fetchExtras();
@@ -138,37 +135,35 @@ const handleAddMilestone = async () => {
 };
 // 
 const handleDonate = async () => {
-  const user = JSON.parse(localStorage.getItem("user"));
 
-  if (!user) return toast.error("Please login to donate");
-  if (!donationAmount) return toast.error("Enter amount");
+  const res = await fetch(`${import.meta.env.VITE_API_URL}/create-order`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      amount: Number(donationAmount),
+      projectId: id
+    })
+  });
 
-  if (project?.amount_raised >= project?.funding_goal) {
-    return toast.error("Funding goal already reached");
-  }
+  const order = await res.json();
 
-  try {
-    // ✅ load stripe
-    const stripe = await stripePromise;
+  const options = {
+    key: import.meta.env.VITE_RAZORPAY_KEY,
+    amount: order.amount,
+    currency: "INR",
+    name: "FundSpark",
+    description: "Project Donation",
+    order_id: order.id,
 
-    // ✅ call backend stripe session
-    const res = await apiFetch("/create-payment-intent", {
-      method: "POST",
-      body: JSON.stringify({
-        amount: Number(donationAmount),
-        projectId: id,
-      }),
-    });
+    handler: function () {
+      alert("Payment Successful");
+    }
+  };
 
-    // ✅ redirect to Stripe checkout
-    await stripe.redirectToCheckout({
-      sessionId: res.sessionId,
-    });
-
-  } catch (err) {
-    console.error(err);
-    toast.error("Stripe session failed");
-  }
+  const rzp = new window.Razorpay(options);
+  rzp.open();
 };
 // 
   const handleShare = async () => {
