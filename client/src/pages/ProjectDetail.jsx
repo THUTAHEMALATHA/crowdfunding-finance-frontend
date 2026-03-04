@@ -169,7 +169,7 @@ const handleDonate = async () => {
           },
           body: JSON.stringify({
             project_id: id,
-            amount: donationAmount
+            amount: Number(donationAmount)
           })
         }
       );
