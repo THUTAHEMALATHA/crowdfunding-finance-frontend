@@ -133,7 +133,7 @@ const handleAddMilestone = async () => {
     toast.error("Failed to add milestone");
   }
 };
-// 
+// handledonate
 const handleDonate = async () => {
 
   const res = await fetch(`${import.meta.env.VITE_API_URL}/create-order`, {
@@ -146,7 +146,9 @@ const handleDonate = async () => {
       projectId: id
     })
   });
+
   const order = await res.json();
+
   const options = {
     key: import.meta.env.VITE_RAZORPAY_KEY,
     amount: order.amount,
@@ -155,15 +157,41 @@ const handleDonate = async () => {
     description: "Donation",
     order_id: order.id,
 
-    handler: function (response) {
-      alert("Payment Successful");
-      console.log(response)
+    handler: async function (response) {
+
+      const donateRes = await fetch(
+        `${import.meta.env.VITE_API_URL}/donation/create`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+          },
+          body: JSON.stringify({
+            project_id: id,
+            amount: donationAmount
+          })
+        }
+      );
+
+      const data = await donateRes.json();
+
+      if (data.success) {
+        alert("Payment Successful");
+        window.location.reload();
+      } else {
+        alert(data.message);
+      }
+
+      console.log(response);
     },
+
     prefill: {
-      name : "Test User",
-      email: "test@test.com",
+      name: "Test User",
+      email: "test@test.com"
     },
-    theme:{
+
+    theme: {
       color: "#3399cc"
     }
   };
@@ -171,7 +199,8 @@ const handleDonate = async () => {
   const rzp = new window.Razorpay(options);
   rzp.open();
 };
-// 
+
+// handleshare
   const handleShare = async () => {
     const url = window.location.href;
 
