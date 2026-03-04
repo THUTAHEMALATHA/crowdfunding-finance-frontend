@@ -160,7 +160,7 @@ const handleDonate = async () => {
     handler: async function (response) {
 
       const donateRes = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/donate`,
+        `${import.meta.env.VITE_API_URL}/api/donations`,
         {
           method: "POST",
           headers:{
