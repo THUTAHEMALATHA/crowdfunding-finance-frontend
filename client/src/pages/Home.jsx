@@ -28,7 +28,7 @@ const Home = () => {
 //  filter logic
  const filteredProjects = projects.filter((project) => {
   const matchesCategory =
-    category === "all" || project.category === category;
+    category === "all" || project.category.toLowerCase() === category.toLowerCase();
 
   const matchesSearch =
     project.title.toLowerCase().includes(searchTerm.toLowerCase());
