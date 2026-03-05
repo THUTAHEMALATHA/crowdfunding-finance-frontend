@@ -26,24 +26,32 @@ const Home = () => {
       setLoading(false);
     }
   };
+//  filter logic
+ const filteredProjects = projects.filter((project) => {
+  const matchesCategory =
+    category === "all" || project.category === category;
 
-  const filteredProjects = projects
-    .filter((p) => {
-      const matchesSearch = p.title
-        ?.toLowerCase()
-        .includes(searchTerm.toLowerCase());
+  const matchesSearch =
+    project.title.toLowerCase().includes(searchTerm.toLowerCase());
 
-      const matchesCategory =
-        category === "all" || 
-        p.category?.toLowerCase() === category.toLowerCase();
+  return matchesCategory && matchesSearch;
+});
+//  sorting logic
+    let sortedProjects = [...filteredProjects];
 
-      return matchesSearch && matchesCategory;
-    })
-    .sort((a, b) => {
-      if (sortBy === "goal") return b.funding_goal - a.funding_goal;
-      if (sortBy === "popular") return b.amount_raised - a.amount_raised;
-      return new Date(b.created_at) - new Date(a.created_at);
-    });
+if (sortBy === "popular") {
+  sortedProjects.sort((a, b) => b.amount_raised - a.amount_raised);
+}
+
+if (sortBy === "goal") {
+  sortedProjects.sort((a, b) => b.funding_goal - a.funding_goal);
+}
+
+if (sortBy === "new") {
+  sortedProjects.sort(
+    (a, b) => new Date(b.created_at) - new Date(a.created_at)
+  );
+}
 
   if (loading) {
     return (
@@ -97,82 +105,94 @@ const Home = () => {
 
       {/* SEARCH + FILTERS */}
       <div className="w-full max-w-6xl mx-auto mb-10 grid gap-4 md:grid-cols-3">
-        <input
-          placeholder="Search projects..."
-          className="p-3 bg-gray-900 border border-gray-700 rounded-xl text-white"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
 
-        <select
-          className="p-3 bg-gray-900 border border-gray-700 rounded-xl text-white"
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-        >
-          <option value="all">All Categories</option>
-          <option value="tech">Technology</option>
-          <option value="health">Healthcare</option>
-          <option value="education">Education</option>
-          <option value="environment">Environment</option>
-        </select>
+<input
+placeholder="Search projects..."
+className="p-3 bg-gray-900 border border-gray-700 rounded-xl text-white"
+value={searchTerm}
+onChange={(e) => setSearchTerm(e.target.value)}
+/>
 
-        <select
-          className="p-3 bg-gray-900 border border-gray-700 rounded-xl text-white"
-          value={sortBy}
-          onChange={(e) => setSortBy(e.target.value)}
-        >
-          <option value="new">Newest</option>
-          <option value="popular">Most Funded</option>
-          <option value="goal">Highest Goal</option>
-        </select>
-      </div>
+<select
+className="p-3 bg-gray-900 border border-gray-700 rounded-xl text-white"
+value={category}
+onChange={(e) => setCategory(e.target.value)}
+>
+<option value="all">All Categories</option>
+<option value="tech">Technology</option>
+<option value="health">Healthcare</option>
+<option value="education">Education</option>
+<option value="environment">Environment</option>
+</select>
+
+<select
+className="p-3 bg-gray-900 border border-gray-700 rounded-xl text-white"
+value={sortBy}
+onChange={(e) => setSortBy(e.target.value)}
+>
+<option value="new">Newest</option>
+<option value="popular">Most Funded</option>
+<option value="goal">Highest Goal</option>
+</select>
+
+</div>
 
       {/* PROJECT GRID */}
-      {filteredProjects.length === 0 ? (
-        <p className="text-gray-400 text-center">No projects yet.</p>
-      ) : (
-        <div className="w-full max-w-6xl mx-auto grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {filteredProjects.map((project) => {
-            const percent = Math.min(
-              (project.amount_raised / project.funding_goal) * 100,
-              100
-            );
+    {sortedProjects.length === 0 ? (
+<p className="text-gray-400 text-center">No projects yet.</p>
+) : (
 
-            return (
-              <Link
-                key={project.id}
-                to={`/project/${project.id}`}
-                className="bg-[#111827] border border-gray-800 rounded-2xl p-4 hover:border-gray-600 transition"
-              >
-                <div className="h-40 bg-gray-800 rounded-xl mb-4 overflow-hidden">
-                  {project.image_url && (
-                    <img
-                      src={project.image_url}
-                      alt={project.title}
-                      className="w-full h-full object-cover"
-                    />
-                  )}
-                </div>
+<div className="w-full max-w-6xl mx-auto grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
 
-                <h2 className="font-semibold text-lg mb-2 line-clamp-2">
-                  {project.title}
-                </h2>
+{sortedProjects.map((project) => {
 
-                <div className="w-full bg-gray-800 h-2 rounded-full mb-2">
-                  <div
-                    className="bg-blue-500 h-2 rounded-full"
-                    style={{ width: `${percent}%` }}
-                  />
-                </div>
+const percent = Math.min(
+(project.amount_raised / project.funding_goal) * 100,
+100
+);
 
-                <div className="text-sm text-gray-400">
-                  ₹{project.amount_raised} raised of ₹{project.funding_goal}
-                </div>
-              </Link>
-            );
-          })}
-        </div>
-      )}
+return (
+
+<Link
+key={project.id}
+to={`/project/${project.id}`}
+className="bg-[#111827] border border-gray-800 rounded-2xl p-4 hover:border-gray-600 transition"
+>
+
+<div className="h-40 bg-gray-800 rounded-xl mb-4 overflow-hidden">
+
+{project.image_url && (
+<img
+src={project.image_url}
+alt={project.title}
+className="w-full h-full object-cover"
+/>
+)}
+
+</div>
+
+<h2 className="font-semibold text-lg mb-2 line-clamp-2">
+{project.title}
+</h2>
+
+<div className="w-full bg-gray-800 h-2 rounded-full mb-2">
+<div
+className="bg-blue-500 h-2 rounded-full"
+style={{ width: `${percent}%` }}
+/>
+</div>
+
+<div className="text-sm text-gray-400">
+₹{project.amount_raised} raised of ₹{project.funding_goal}
+</div>
+
+</Link>
+
+);
+})}
+
+</div>
+)}
 
       {/* ================= SUCCESS STORIES ================= */}
 <div className="mt-24 max-w-6xl mx-auto w-full">
