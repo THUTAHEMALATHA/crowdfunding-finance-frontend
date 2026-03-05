@@ -12,9 +12,8 @@ const Home = () => {
 
   useReveal();
 
-  useEffect(() => {
-    fetchProjects();
-  }, []);
+  useEffect(() => {fetchProjects(); }, []);
+  useEffect(() => {fetchProjects(projects); }, [projects]);
 
   const fetchProjects = async () => {
     try {
