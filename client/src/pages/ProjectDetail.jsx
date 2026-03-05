@@ -232,11 +232,11 @@ const handleDonate = async () => {
 
  const isGoalReached =
   project &&
-  Number(project?._raised) >=
+  Number(project?.amount_raised) >=
   Number( project.funding_goal);
 
   const percent = Math.min(
-  ((project?._raised || 0) / project?.funding_goal) * 100,
+  ((project?.amount_raised || 0) / project?.funding_goal) * 100,
   100
   );
 
@@ -416,7 +416,7 @@ const handleDonate = async () => {
         {/* RIGHT FUNDING CARD */}
         <div className="bg-[#111827] border border-gray-800 rounded-2xl p-6 h-fit sticky top-6">
           <div className="text-2xl font-bold mb-2">
-            ₹{project?._raised}
+            ₹{project?.amount_raised}
           </div>
 
           <div className="text-gray-400 mb-4">
