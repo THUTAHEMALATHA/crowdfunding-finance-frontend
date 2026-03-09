@@ -404,7 +404,7 @@ const handleDonate = async () => {
             >
               <div className="font-semibold">{m.title}</div>
               <div className="text-gray-400 text-sm">
-                Unlock at ₹{m.unlock_}
+                Unlock at ₹{m.unlock_amount}
               </div>
             </div>
           ))

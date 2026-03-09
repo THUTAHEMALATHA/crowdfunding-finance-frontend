@@ -12,8 +12,8 @@ const Home = () => {
 
   useReveal();
 
-  useEffect(() => {fetchProjects(); }, []);
-  useEffect(() => {fetchProjects(projects); }, [projects]);
+  useEffect(() => { fetchProjects(); }, []);
+  useEffect(() => { fetchProjects(projects); }, [projects]);
 
   const fetchProjects = async () => {
     try {
@@ -25,32 +25,32 @@ const Home = () => {
       setLoading(false);
     }
   };
-//  filter logic
- const filteredProjects = projects.filter((project) => {
-  const matchesCategory =
-    category === "all" || project.category.toLowerCase() === category.toLowerCase();
+  //  filter logic
+  const filteredProjects = projects.filter((project) => {
+    const matchesCategory =
+      category === "all" || project.category.toLowerCase() === category.toLowerCase();
 
-  const matchesSearch =
-    project.title.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch =
+      project.title.toLowerCase().includes(searchTerm.toLowerCase());
 
-  return matchesCategory && matchesSearch;
-});
-//  sorting logic
-    let sortedProjects = [...filteredProjects];
+    return matchesCategory && matchesSearch;
+  });
+  //  sorting logic
+  let sortedProjects = [...filteredProjects];
 
-if (sortBy === "popular") {
-  sortedProjects.sort((a, b) => b.amount_raised - a.amount_raised);
-}
+  if (sortBy === "popular") {
+    sortedProjects.sort((a, b) => b.amount_raised - a.amount_raised);
+  }
 
-if (sortBy === "goal") {
-  sortedProjects.sort((a, b) => b.funding_goal - a.funding_goal);
-}
+  if (sortBy === "goal") {
+    sortedProjects.sort((a, b) => b.funding_goal - a.funding_goal);
+  }
 
-if (sortBy === "new") {
-  sortedProjects.sort(
-    (a, b) => new Date(b.created_at) - new Date(a.created_at)
-  );
-}
+  if (sortBy === "new") {
+    sortedProjects.sort(
+      (a, b) => new Date(b.created_at) - new Date(a.created_at)
+    );
+  }
 
   if (loading) {
     return (
@@ -105,156 +105,156 @@ if (sortBy === "new") {
       {/* SEARCH + FILTERS */}
       <div className="w-full max-w-6xl mx-auto mb-10 grid gap-4 md:grid-cols-3">
 
-<input
-placeholder="Search projects..."
-className="p-3 bg-gray-900 border border-gray-700 rounded-xl text-white"
-value={searchTerm}
-onChange={(e) => setSearchTerm(e.target.value)}
-/>
+        <input
+          placeholder="Search projects..."
+          className="p-3 bg-gray-900 border border-gray-700 rounded-xl text-white"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
 
-<select
-className="p-3 bg-gray-900 border border-gray-700 rounded-xl text-white"
-value={category}
-onChange={(e) => setCategory(e.target.value)}
->
-<option value="all">All Categories</option>
-<option value="tech">Technology</option>
-<option value="health">Healthcare</option>
-<option value="education">Education</option>
-<option value="environment">Environment</option>
-</select>
+        <select
+          className="p-3 bg-gray-900 border border-gray-700 rounded-xl text-white"
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+        >
+          <option value="all">All Categories</option>
+          <option value="tech">Technology</option>
+          <option value="health">Healthcare</option>
+          <option value="education">Education</option>
+          <option value="environment">Environment</option>
+        </select>
 
-<select
-className="p-3 bg-gray-900 border border-gray-700 rounded-xl text-white"
-value={sortBy}
-onChange={(e) => setSortBy(e.target.value)}
->
-<option value="new">Newest</option>
-<option value="popular">Most Funded</option>
-<option value="goal">Highest Goal</option>
-</select>
+        <select
+          className="p-3 bg-gray-900 border border-gray-700 rounded-xl text-white"
+          value={sortBy}
+          onChange={(e) => setSortBy(e.target.value)}
+        >
+          <option value="new">Newest</option>
+          <option value="popular">Most Funded</option>
+          <option value="goal">Highest Goal</option>
+        </select>
 
-</div>
+      </div>
 
       {/* PROJECT GRID */}
-    {sortedProjects.length === 0 ? (
-<p className="text-gray-400 text-center">No projects yet.</p>
-) : (
+      {sortedProjects.length === 0 ? (
+        <p className="text-gray-400 text-center">No projects yet.</p>
+      ) : (
 
-<div className="w-full max-w-6xl mx-auto grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="w-full max-w-6xl mx-auto grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
 
-{sortedProjects.map((project) => {
+          {sortedProjects.map((project) => {
 
-const percent = Math.min(
-(project.amount_raised / project.funding_goal) * 100,
-100
-);
+            const percent = Math.min(
+              (project.amount_raised / project.funding_goal) * 100,
+              100
+            );
 
-return (
+            return (
 
-<Link
-key={project.id}
-to={`/project/${project.id}`}
-className="bg-[#111827] border border-gray-800 rounded-2xl p-4 hover:border-gray-600 transition"
->
+              <Link
+                key={project.id}
+                to={`/project/${project.id}`}
+                className="bg-[#111827] border border-gray-800 rounded-2xl p-4 hover:border-gray-600 transition"
+              >
 
-<div className="h-40 bg-gray-800 rounded-xl mb-4 overflow-hidden">
+                <div className="h-40 bg-gray-800 rounded-xl mb-4 overflow-hidden">
 
-{project.image_url && (
-<img
-src={project.image_url}
-alt={project.title}
-className="w-full h-full object-cover"
-/>
-)}
+                  {project.image_url && (
+                    <img
+                      src={project.image_url}
+                      alt={project.title}
+                      className="w-full h-full object-cover"
+                    />
+                  )}
 
-</div>
+                </div>
 
-<h2 className="font-semibold text-lg mb-2 line-clamp-2">
-{project.title}
-</h2>
+                <h2 className="font-semibold text-lg mb-2 line-clamp-2">
+                  {project.title}
+                </h2>
 
-<div className="w-full bg-gray-800 h-2 rounded-full mb-2">
-<div
-className="bg-blue-500 h-2 rounded-full"
-style={{ width: `${percent}%` }}
-/>
-</div>
+                <div className="w-full bg-gray-800 h-2 rounded-full mb-2">
+                  <div
+                    className="bg-blue-500 h-2 rounded-full"
+                    style={{ width: `${percent}%` }}
+                  />
+                </div>
 
-<div className="text-sm text-gray-400">
-₹{project.amount_raised} raised of ₹{project.funding_goal}
-</div>
+                <div className="text-sm text-gray-400">
+                  ₹{project.amount_raised} raised of ₹{project.funding_goal}
+                </div>
 
-</Link>
+              </Link>
 
-);
-})}
+            );
+          })}
 
-</div>
-)}
+        </div>
+      )}
 
       {/* ================= SUCCESS STORIES ================= */}
-<div className="mt-24 max-w-6xl mx-auto w-full">
-  <h2 className="text-3xl font-bold mb-10 text-center">
-    Success Stories
-  </h2>
+      <div className="mt-24 max-w-6xl mx-auto w-full">
+        <h2 className="text-3xl font-bold mb-10 text-center">
+          Success Stories
+        </h2>
 
-  <div className="grid gap-6 md:grid-cols-3">
+        <div className="grid gap-6 md:grid-cols-3">
 
-    {/* Card 1 */}
-    <div className="bg-[#111827] border border-gray-800 rounded-2xl overflow-hidden hover:scale-[1.02] transition">
-      <img
-        src="https://images.unsplash.com/photo-1509395176047-4a66953fd231"
-        alt="Solar Smart Charger"
-        className="h-40 w-full object-cover"
-      />
-      <div className="p-6">
-        <div className="text-lg font-semibold mb-2">
-          Solar Smart Charger
+          {/* Card 1 */}
+          <div className="bg-[#111827] border border-gray-800 rounded-2xl overflow-hidden hover:scale-[1.02] transition">
+            <img
+              src="https://images.unsplash.com/photo-1509395176047-4a66953fd231"
+              alt="Solar Smart Charger"
+              className="h-40 w-full object-cover"
+            />
+            <div className="p-6">
+              <div className="text-lg font-semibold mb-2">
+                Solar Smart Charger
+              </div>
+              <p className="text-gray-400 text-sm">
+                Raised ₹1,20,000 from 540 backers and successfully launched.
+              </p>
+            </div>
+          </div>
+
+          {/* Card 2 */}
+          <div className="bg-[#111827] border border-gray-800 rounded-2xl overflow-hidden hover:scale-[1.02] transition">
+            <img
+              src="https://images.unsplash.com/photo-1526406915894-7bcd65f60845"
+              alt="Eco Water Bottle"
+              className="h-40 w-full object-cover"
+            />
+            <div className="p-6">
+              <div className="text-lg font-semibold mb-2">
+                Eco Water Bottle
+              </div>
+              <p className="text-gray-400 text-sm">
+                Fully funded in 3 days with overwhelming community support.
+              </p>
+            </div>
+          </div>
+
+          {/* Card 3 */}
+          <div className="bg-[#111827] border border-gray-800 rounded-2xl overflow-hidden hover:scale-[1.02] transition">
+            <img
+              src="https://images.unsplash.com/photo-1559136555-9303baea8ebd"
+              alt="ConnectHub Platform"
+              className="h-40 w-full object-cover"
+            />
+            <div className="p-6">
+              <div className="text-lg font-semibold mb-2">
+                ConnectHub Platform
+              </div>
+              <p className="text-gray-400 text-sm">
+                Built a global creator community with 2,000+ early adopters.
+              </p>
+            </div>
+          </div>
+
         </div>
-        <p className="text-gray-400 text-sm">
-          Raised ₹1,20,000 from 540 backers and successfully launched.
-        </p>
       </div>
-    </div>
-
-    {/* Card 2 */}
-    <div className="bg-[#111827] border border-gray-800 rounded-2xl overflow-hidden hover:scale-[1.02] transition">
-      <img
-        src="https://images.unsplash.com/photo-1526406915894-7bcd65f60845"
-        alt="Eco Water Bottle"
-        className="h-40 w-full object-cover"
-      />
-      <div className="p-6">
-        <div className="text-lg font-semibold mb-2">
-          Eco Water Bottle
-        </div>
-        <p className="text-gray-400 text-sm">
-          Fully funded in 3 days with overwhelming community support.
-        </p>
-      </div>
-    </div>
-
-    {/* Card 3 */}
-    <div className="bg-[#111827] border border-gray-800 rounded-2xl overflow-hidden hover:scale-[1.02] transition">
-      <img
-        src="https://images.unsplash.com/photo-1559136555-9303baea8ebd"
-        alt="ConnectHub Platform"
-        className="h-40 w-full object-cover"
-      />
-      <div className="p-6">
-        <div className="text-lg font-semibold mb-2">
-          ConnectHub Platform
-        </div>
-        <p className="text-gray-400 text-sm">
-          Built a global creator community with 2,000+ early adopters.
-        </p>
-      </div>
-    </div>
-
-  </div>
-</div>
-{/* ================= END SUCCESS ================= */}
+      {/* ================= END SUCCESS ================= */}
 
     </section>
   );

@@ -99,7 +99,7 @@ const CreateProject = () => {
         <button className="w-full bg-blue-600 py-3 rounded-lg text-white font-semibold">
           Create Project
         </button>
-      </form>
+  </form>
     </div>
   );
 };
